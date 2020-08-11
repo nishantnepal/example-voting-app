@@ -13,7 +13,9 @@ services:
       - back-tier
 
   result:
-    build: ./result
+    build:
+      context: ./result
+      dockerfile: Dockerfile
     command: nodemon server.js
     volumes:
       - ./result:/app

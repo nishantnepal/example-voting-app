@@ -44,13 +44,13 @@ stages:
     - upload: manifests
       artifact: manifests
 
-- stage: Deploy
+- stage: Dev
   displayName: Deploy stage
   dependsOn: Build
 
   jobs:
-  - deployment: Deploy
-    displayName: Deploy
+  - deployment:  Deploy
+    displayName: Deploy    
     pool:
       vmImage: $(vmImageName)
     environment: 'nishantnepalexamplevotingapp.default'
@@ -78,4 +78,38 @@ stages:
                 $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
+- stage: Test
+  displayName: Deploy stage
+  dependsOn: Dev
+
+  jobs:
+  - deployment:  Deploy
+    displayName: Deploy    
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'nishantnepalexamplevotingapp.default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: 'createSecret'
+              kubernetesServiceConnection: 'aksb67f-default'
+              secretType: 'dockerRegistry'
+              secretName: '$(imagePullSecret)'
+              dockerRegistryEndpoint: '$(dockerRegistryServiceConnection)'
+              
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/service.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag)                
 

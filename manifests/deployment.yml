@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: nishantnepalexamplevotingapp 
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nishantnepalexamplevotingapp 
+    spec:
+      containers:
+        - name: nishantnepalexamplevotingapp 
+          image: nishant2.azurecr.io/nishantnepalexamplevotingapp
+          ports:
+          - containerPort: 80

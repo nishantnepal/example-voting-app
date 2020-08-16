@@ -3,7 +3,10 @@ kind: Deployment
 metadata:
   name: nishantnepalexamplevotingapp 
 spec:
-  replicas: 1
+  replicas: 5
+  selector:
+    matchLabels:
+      app: aspnetcore-sample-dep
   template:
     metadata:
       labels:

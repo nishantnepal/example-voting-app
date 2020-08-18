@@ -26,13 +26,6 @@ stages:
 - stage: Build
   displayName: Build stage
   jobs:  
-  - job: Echo_Variables
-    displayName: Echo Variables
-    variables: 
-    - group: advworks-dev
-    steps:
-      - script: |
-         echo $(Hello)
   - job: Build
     displayName: Build
     pool:
@@ -50,6 +43,14 @@ stages:
           
     - upload: manifests
       artifact: manifests
+  
+  - job: Echo_Variables
+    displayName: Echo Variables
+    variables: 
+    - group: advworks-dev
+    steps:
+      - script: |
+         echo $(Hello)
 
 - stage: Dev
   displayName: Dev

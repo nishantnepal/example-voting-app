@@ -26,6 +26,13 @@ stages:
 - stage: Build
   displayName: Build stage
   jobs:  
+  - job: Echo_Variables
+    displayName: Echo Variables
+    variables: 
+    - group: advworks-dev
+    steps:
+      - script: |
+         echo $(Hello)
   - job: Build
     displayName: Build
     pool:
@@ -51,6 +58,8 @@ stages:
   jobs:
   - deployment:  Deploy
     displayName: Deploy    
+    variables:
+     - group: advworks-dev
     pool:
       vmImage: $(vmImageName)
     environment: 'nishantnepalexamplevotingapp.default'
